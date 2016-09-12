@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.pactsafe</groupId>
+    <artifactId>${client.library}</artifactId>
+    <packaging>jar</packaging>
+    <name>PactSafe SDK For Java</name>
+    <description>The PactSafe SDK for Java provides Java APIs that allows developers to easily access their legal system of record through PactSafe's Activity API.</description>
+
+    <version>${client.version}</version>
+
+    <properties>
+        <client.library>pactsafe-java-sdk</client.library>
+        <client.version>1.0.0</client.version>
+    </properties>
+
+    <scm>
+        <!--<url>https://github.com/aws/aws-sdk-java.git</url>-->
+    </scm>
+
+    <!--<licenses>-->
+        <!--<license>-->
+            <!--<name>Apache License, Version 2.0</name>-->
+            <!--<url>https://aws.amazon.com/apache2.0</url>-->
+            <!--<distribution>repo</distribution>-->
+        <!--</license>-->
+    <!--</licenses>-->
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <!-- include main.properties -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>main.properties</include>
+                </includes>
+            </resource>
+
+            <!-- exclude everything else from filtering -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>main.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+
+</project>
