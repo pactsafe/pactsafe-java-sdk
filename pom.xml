@@ -4,29 +4,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pactsafe</groupId>
-    <artifactId>${client.library}</artifactId>
+
     <packaging>jar</packaging>
     <name>PactSafe SDK For Java</name>
     <description>The PactSafe SDK for Java provides Java APIs that allows developers to easily access their legal system of record through PactSafe's Activity API.</description>
 
-    <version>${client.version}</version>
-
+    <!-- !important! Remember to update version and id in both locations and keep them in sync -->
+    <version>1.0.1</version>
+    <artifactId>pactsafe-java-sdk</artifactId>
     <properties>
+        <client.version>1.0.1</client.version>
         <client.library>pactsafe-java-sdk</client.library>
-        <client.version>1.0.0</client.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <scm>
-        <!--<url>https://github.com/aws/aws-sdk-java.git</url>-->
+        <url>https://github.com/pactsafe/pactsafe-java-sdk.git</url>
     </scm>
-
-    <!--<licenses>-->
-        <!--<license>-->
-            <!--<name>Apache License, Version 2.0</name>-->
-            <!--<url>https://aws.amazon.com/apache2.0</url>-->
-            <!--<distribution>repo</distribution>-->
-        <!--</license>-->
-    <!--</licenses>-->
 
     <dependencies>
         <dependency>
