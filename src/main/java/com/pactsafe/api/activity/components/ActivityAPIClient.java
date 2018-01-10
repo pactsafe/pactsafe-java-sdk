@@ -31,7 +31,7 @@ public class ActivityAPIClient {
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
-            conn.setInstanceFollowRedirects(false);
+            conn.setInstanceFollowRedirects(true);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("charset", "utf-8");
@@ -95,7 +95,6 @@ public class ActivityAPIClient {
             throw new PactSafeActivityException("Could not complete load action.", e);
         }
     }
-
 
     public String getBaseUrl() {
         return baseUrl;
