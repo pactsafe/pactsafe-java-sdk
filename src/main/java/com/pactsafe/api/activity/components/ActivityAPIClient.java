@@ -4,9 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pactsafe.api.activity.domain.ParameterStore;
 import com.pactsafe.api.activity.domain.Payload;
-import okhttp3.*;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -14,46 +15,60 @@ import java.util.Map;
  */
 public class ActivityAPIClient {
 
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
-
     private String baseUrl;
-    private OkHttpClient client;
     private ObjectMapper mapper;
 
     public ActivityAPIClient() {
-        this.client = new OkHttpClient();
         this.mapper = new ObjectMapper();
     }
 
-    public void send(ParameterStore parameters) throws PactSafeActivityException {
+    private String request(String path, String postData) throws PactSafeActivityException {
         try {
-            RequestBody body = RequestBody.create(TEXT, new Payload(parameters).toString());
-            Request request = new Request.Builder()
-                    .url(baseUrl + "/send")
-                    .post(body)
-                    .build();
-            Response response = client.newCall(request).execute();
-            if (response.code() >= 400) {
-                throw new PactSafeActivityException("send", response.code(), response.message());
+            byte[] postDataBytes = postData.getBytes("UTF-8");
+            int postDataLength = postDataBytes.length;
+            String request = baseUrl + path;
+            URL url = new URL(request);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setInstanceFollowRedirects(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setRequestProperty("charset", "utf-8");
+            conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+            conn.setDoOutput(true);
+            conn.setUseCaches(false);
+            conn.getOutputStream().write(postDataBytes);
+
+            if (conn.getResponseCode() >= 400) {
+                throw new PactSafeActivityException(path, conn.getResponseCode(), conn.getResponseMessage());
             }
+
+            Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+            StringBuilder sb = new StringBuilder();
+            for (int c; (c = in.read()) >= 0;)
+                sb.append((char)c);
+
+            return sb.toString();
+
         } catch (IOException e) {
-            throw new PactSafeActivityException("Could not complete send action.", e);
+            throw new PactSafeActivityException("Could not complete action for " + path, e);
         }
+    }
+
+    public void send(ParameterStore parameters) throws PactSafeActivityException {
+        String postData = new Payload(parameters).toString();
+        String path = "/send";
+        this.request(path, postData);
     }
 
     public Map<Integer, String> retrieve(ParameterStore parameters) throws PactSafeActivityException {
         try {
-            RequestBody body = RequestBody.create(TEXT, new Payload(parameters).toString());
-            Request request = new Request.Builder()
-                    .url(baseUrl + "/retrieve")
-                    .post(body)
-                    .build();
-            Response response = client.newCall(request).execute();
-            if (response.code() >= 400) {
-                throw new PactSafeActivityException("retrieve", response.code(), response.message());
-            }
-            return mapper.readValue(response.body().string(), new TypeReference<Map<Integer, String>>(){});
+            String postData = new Payload(parameters).toString();
+            String path = "/retrieve";
+            String response = this.request(path, postData);
+            return mapper.readValue(response, new TypeReference<Map<Integer, String>>(){});
         } catch (IOException e) {
             throw new PactSafeActivityException("Could not complete retrieve action.", e);
         }
@@ -61,16 +76,10 @@ public class ActivityAPIClient {
 
     public Map<Integer, Boolean> latest(ParameterStore parameters) throws PactSafeActivityException {
         try {
-            RequestBody body = RequestBody.create(TEXT, new Payload(parameters).toString());
-            Request request = new Request.Builder()
-                    .url(baseUrl + "/latest")
-                    .post(body)
-                    .build();
-            Response response = client.newCall(request).execute();
-            if (response.code() >= 400) {
-                throw new PactSafeActivityException("latest", response.code(), response.message());
-            }
-            return mapper.readValue(response.body().string(), new TypeReference<Map<Integer, Boolean>>(){});
+            String postData = new Payload(parameters).toString();
+            String path = "/latest";
+            String response = this.request(path, postData);
+            return mapper.readValue(response, new TypeReference<Map<Integer, Boolean>>(){});
         } catch (IOException e) {
             throw new PactSafeActivityException("Could not complete latest action.", e);
         }
@@ -78,16 +87,10 @@ public class ActivityAPIClient {
 
     public ParameterStore load(ParameterStore parameters) throws PactSafeActivityException {
         try {
-            RequestBody body = RequestBody.create(TEXT, new Payload(parameters).toString());
-            Request request = new Request.Builder()
-                    .url(baseUrl + "/load/json")
-                    .post(body)
-                    .build();
-            Response response = client.newCall(request).execute();
-            if (response.code() >= 400) {
-                throw new PactSafeActivityException("load", response.code(), response.message());
-            }
-            return mapper.readValue(response.body().string(), ParameterStore.class);
+            String postData = new Payload(parameters).toString();
+            String path = "/load/json";
+            String response = this.request(path, postData);
+            return mapper.readValue(response, ParameterStore.class);
         } catch (IOException e) {
             throw new PactSafeActivityException("Could not complete load action.", e);
         }
