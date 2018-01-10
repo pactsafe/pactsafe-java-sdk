@@ -1,21 +1,21 @@
 # ![pactsafe-java-sdk](media/logo.png)
 
-[![Build Status](http://jenkins.pactsafe.com/buildStatus/icon?job=Java SDK)](http://jenkins.pactsafe.com/job/Java%20SDK/) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.pactsafe/pactsafe-java-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.pactsafe/pactsafe-java-sdk)
-
-#pactsafe-java-sdk
+### pactsafe-java-sdk
 
 A Java client for the [PactSafe](https://www.pactsafe.com) Activity API. Integrate into any application for secure legal record-keeping.
 
-## Initialization
+## Installation
 
+Download the [release](https://github.com/pactsafe/pactsafe-java-sdk/releases) or clone to build with `mvn clean install`.
+*Coming soon to maven-central.*
 ```
 <dependency>
   <groupId>com.pactsafe</groupId>
   <artifactId>pactsafe-java-sdk</artifactId>
-  <version>{Latest}</version>
+  <version>{version}</version>
 </dependency>
 ```
-*Coming soon to maven-central.*
+
 
 ## Initialization
 
@@ -36,7 +36,7 @@ Activity site = new Activity("ACCESS_KEY", parameters);
 The third argument is an optional `ActivityOptions` object of client configuration settings.
 ```java
 ActivityOptions options = new ActivityOptions();
-options.setHost("http://localhost:3000");
+options.setHost("https://pactsafe.io);      //optional
 Activity site = new Activity("ACCESS_KEY", parameters, options);
 ```
 
