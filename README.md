@@ -36,7 +36,7 @@ Activity site = new Activity("ACCESS_KEY", parameters);
 The third argument is an optional `ActivityOptions` object of client configuration settings.
 ```java
 ActivityOptions options = new ActivityOptions();
-options.setHost("https://pactsafe.io);      //optional
+options.setHost("https://pactsafe.io");      //optional
 Activity site = new Activity("ACCESS_KEY", parameters, options);
 ```
 
